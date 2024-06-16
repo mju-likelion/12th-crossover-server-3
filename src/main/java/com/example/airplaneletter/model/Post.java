@@ -1,4 +1,4 @@
-package model;
+package com.example.airplaneletter.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
