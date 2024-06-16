@@ -1,5 +1,5 @@
 # 12th-crossover-server-3
-# 크로스오버 3
+# 멋쟁이사자처럼 12기 크로스오버 server 3
 
 # MJU LIKELION
 
