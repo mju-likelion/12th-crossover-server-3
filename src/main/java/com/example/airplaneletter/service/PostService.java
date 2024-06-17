@@ -21,10 +21,12 @@ import java.util.UUID;
 public class PostService {
     private final PostRepository postRepository;
     public Page<AllPostsResponseData> getAllPosts(User user, Pageable pageable) {
+        // 모든 포스트 조회하기
         Page<Post> postPage = postRepository.findAll(pageable);
         List<AllPostsResponseData> postList = new ArrayList<>();
 
         for (Post post : postPage) {
+            // 이때는 comments 가 없다.
             AllPostsResponseData postData = AllPostsResponseData.builder()
                     .title(post.getTitle())
                     .content(post.getContent())
@@ -39,6 +41,7 @@ public class PostService {
         return new PageImpl<>(postList, pageable, postPage.getTotalElements());
     }
     public DetailedPostResponseData createPost(User user, PostDto postDto){
+        // 새 포스트 작성하기.
         Post post = Post.builder()
                 .content(postDto.getContent())
                 .title(postDto.getTitle())
@@ -54,6 +57,7 @@ public class PostService {
         return postResponseData;
     }
     public void deletePost(User user, UUID postId) {
+        // 포스트 삭제하기.
         Post oldPost = postRepository.findPostById(postId);
 
         if (isPostOwner(user, oldPost)) {
@@ -63,11 +67,13 @@ public class PostService {
         }
     }
     public DetailedPostResponseData getPostDetails(User user, UUID postId){
+        // 특정 포스트 조회하기.
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Post not found."));
         boolean isMyPost = isPostOwner(user, post);
 
         return DetailedPostResponseData.builder()
+                // comments 를 볼 수 있다.
                 .title(post.getTitle())
                 .content(post.getContent())
                 .nickname(post.getWriter().getNickname())
