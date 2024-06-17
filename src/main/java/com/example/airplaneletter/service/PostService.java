@@ -4,8 +4,8 @@ import com.example.airplaneletter.dto.PostDto;
 import com.example.airplaneletter.model.Post;
 import com.example.airplaneletter.model.User;
 import com.example.airplaneletter.repository.PostRepository;
-import com.example.airplaneletter.response.PostListResponseData;
-import com.example.airplaneletter.response.PostResponseData;
+import com.example.airplaneletter.response.AllPostsResponseData;
+import com.example.airplaneletter.response.DetailedPostResponseData;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,15 +20,15 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
-    public Page<PostListResponseData> getAllPosts(User user, Pageable pageable) {
+    public Page<AllPostsResponseData> getAllPosts(User user, Pageable pageable) {
         Page<Post> postPage = postRepository.findAll(pageable);
-        List<PostListResponseData> postList = new ArrayList<>();
+        List<AllPostsResponseData> postList = new ArrayList<>();
 
         for (Post post : postPage) {
-            PostListResponseData postData = PostListResponseData.builder()
+            AllPostsResponseData postData = AllPostsResponseData.builder()
                     .title(post.getTitle())
                     .content(post.getContent())
-                    .nickname(post.getWriter().getNickname())
+                    .writer(post.getWriter().getNickname())
                     .createdAt(post.getCreatedAt())
                     .isMyPost(post.getWriter().getId().equals(user.getId()))
                     .build();
@@ -38,7 +38,7 @@ public class PostService {
 
         return new PageImpl<>(postList, pageable, postPage.getTotalElements());
     }
-    public PostResponseData createPost(User user, PostDto postDto){
+    public DetailedPostResponseData createPost(User user, PostDto postDto){
         Post post = Post.builder()
                 .content(postDto.getContent())
                 .title(postDto.getTitle())
@@ -46,10 +46,10 @@ public class PostService {
                 .build();
 
         postRepository.save(post);
-        PostResponseData postResponseData = PostResponseData.builder()
+        DetailedPostResponseData postResponseData = DetailedPostResponseData.builder()
                 .title(postDto.getTitle())
                 .content(postDto.getContent())
-                .writer(post.getWriter().getNickname())
+                .nickname(post.getWriter().getNickname())
                 .build();
         return postResponseData;
     }
@@ -62,15 +62,15 @@ public class PostService {
             throw new RuntimeException("해당 게시글을 삭제할 수 없습니다.");
         }
     }
-    public PostResponseData getPostDetails(User user, UUID postId){
+    public DetailedPostResponseData getPostDetails(User user, UUID postId){
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Post not found."));
         boolean isMyPost = isPostOwner(user, post);
 
-        return PostResponseData.builder()
+        return DetailedPostResponseData.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
-                .writer(post.getWriter().getNickname())
+                .nickname(post.getWriter().getNickname())
                 .comments(post.getComments())
                 .isMyPost(isMyPost)
                 .createdAt(post.getCreatedAt())

@@ -3,8 +3,8 @@ package com.example.airplaneletter.controller;
 import com.example.airplaneletter.dto.PostDto;
 import com.example.airplaneletter.dto.ResponseDto;
 import com.example.airplaneletter.model.User;
-import com.example.airplaneletter.response.PostListResponseData;
-import com.example.airplaneletter.response.PostResponseData;
+import com.example.airplaneletter.response.AllPostsResponseData;
+import com.example.airplaneletter.response.DetailedPostResponseData;
 import com.example.airplaneletter.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,19 +23,19 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping
-    public ResponseEntity<ResponseDto<Page<PostListResponseData>>> getAllPosts(
+    public ResponseEntity<ResponseDto<Page<AllPostsResponseData>>> getAllPosts(
             User user,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<PostListResponseData> posts = postService.getAllPosts(user, pageable);
+        Page<AllPostsResponseData> posts = postService.getAllPosts(user, pageable);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "ok", posts), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDto<PostResponseData>> createPost(User user, @RequestBody PostDto postDto) {
-        PostResponseData postResponseData = postService.createPost(user, postDto);
+    public ResponseEntity<ResponseDto<DetailedPostResponseData>> createPost(User user, @RequestBody PostDto postDto) {
+        DetailedPostResponseData postResponseData = postService.createPost(user, postDto);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.CREATED, "ok", postResponseData), HttpStatus.CREATED);
 
     }
@@ -47,8 +47,8 @@ public class PostController {
 
     }
     @GetMapping("/{postId}")
-    public ResponseEntity<ResponseDto<PostResponseData>> getPostDetails(User user, @PathVariable UUID postId) {
-        PostResponseData postResponseData = postService.getPostDetails(user, postId);
+    public ResponseEntity<ResponseDto<DetailedPostResponseData>> getPostDetails(User user, @PathVariable UUID postId) {
+        DetailedPostResponseData postResponseData = postService.getPostDetails(user, postId);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "ok", postResponseData), HttpStatus.OK);
     }
 }
