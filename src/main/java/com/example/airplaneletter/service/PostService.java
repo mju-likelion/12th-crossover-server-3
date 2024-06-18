@@ -32,7 +32,8 @@ public class PostService {
                     .content(post.getContent())
                     .writer(post.getWriter().getNickname())
                     .createdAt(post.getCreatedAt())
-                    .isMyPost(post.getWriter().getId().equals(user.getId()))
+                    // 수정.
+                    .isMyPost(true)
                     .build();
 
             postList.add(postData);
