@@ -42,13 +42,13 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<ResponseDto<Void>> deletePost(@AuthenticatedUser User user, @PathVariable UUID postId) {
+    public ResponseEntity<ResponseDto<Void>> deletePost(@AuthenticatedUser User user, @RequestHeader UUID postId) {
         postService.deletePost(user, postId);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "ok"), HttpStatus.OK);
 
     }
     @GetMapping("/{postId}")
-    public ResponseEntity<ResponseDto<DetailedPostResponseData>> getPostDetails(@AuthenticatedUser User user, @PathVariable UUID postId) {
+    public ResponseEntity<ResponseDto<DetailedPostResponseData>> getPostDetails(@AuthenticatedUser User user, @RequestHeader UUID postId) {
         DetailedPostResponseData postResponseData = postService.getPostDetails(user, postId);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "ok", postResponseData), HttpStatus.OK);
     }
