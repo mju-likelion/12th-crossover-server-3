@@ -1,14 +1,20 @@
 package com.example.airplaneletter.service;
 
+import com.example.airplaneletter.dto.CommentData;
 import com.example.airplaneletter.dto.CreateCommentDto;
 import com.example.airplaneletter.model.Comment;
 import com.example.airplaneletter.model.Post;
 import com.example.airplaneletter.model.User;
 import com.example.airplaneletter.repository.CommentRepository;
 import com.example.airplaneletter.repository.PostRepository;
+import com.example.airplaneletter.response.AllCommentsResponseData;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -41,5 +47,28 @@ public class CommentService {
     public void deleteComment(UUID commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("Comment not found"));
         this.commentRepository.delete(comment);
+    }
+    public AllCommentsResponseData getComments(UUID postId, Pageable pageable){
+        Page<Comment> commentsPage = this.commentRepository.findByPostId(postId, pageable);
+
+        List<CommentData> commentDataList = new ArrayList<>();
+        for (Comment comment : commentsPage.getContent()) {
+            CommentData commentData = new CommentData(
+                    comment.getId(),
+                    comment.getContent(),
+                    comment.getWriter().getNickname(),
+                    comment.getCreatedAt()
+            );
+            commentDataList.add(commentData);
+        }
+
+        AllCommentsResponseData responseData = new AllCommentsResponseData(
+                commentDataList,
+                commentsPage.getNumber(),
+                commentsPage.getTotalPages(),
+                commentsPage.getTotalElements()
+        );
+
+        return responseData;
     }
 }
