@@ -25,7 +25,7 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity<ResponseDto<Page<AllPostsResponseData>>> getAllPosts(
-            User user,
+            @AuthenticatedUser User user,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
@@ -35,20 +35,20 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDto<DetailedPostResponseData>> createPost(User user, @RequestBody PostDto postDto) {
+    public ResponseEntity<ResponseDto<DetailedPostResponseData>> createPost(@AuthenticatedUser User user, @RequestBody PostDto postDto) {
         DetailedPostResponseData postResponseData = postService.createPost(user, postDto);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.CREATED, "ok", postResponseData), HttpStatus.CREATED);
 
     }
     // RequestHeader 로 수정.
     @DeleteMapping("/{postId}")
-    public ResponseEntity<ResponseDto<Void>> deletePost(User user, @RequestHeader UUID postId) {
+    public ResponseEntity<ResponseDto<Void>> deletePost(@AuthenticatedUser User user, @PathVariable UUID postId) {
         postService.deletePost(user, postId);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "ok"), HttpStatus.OK);
 
     }
     @GetMapping("/{postId}")
-    public ResponseEntity<ResponseDto<DetailedPostResponseData>> getPostDetails(User user, @RequestHeader UUID postId) {
+    public ResponseEntity<ResponseDto<DetailedPostResponseData>> getPostDetails(@AuthenticatedUser User user, @PathVariable UUID postId) {
         DetailedPostResponseData postResponseData = postService.getPostDetails(user, postId);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "ok", postResponseData), HttpStatus.OK);
     }

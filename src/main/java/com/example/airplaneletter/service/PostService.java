@@ -32,7 +32,6 @@ public class PostService {
                     .content(post.getContent())
                     .writer(post.getWriter().getNickname())
                     .createdAt(post.getCreatedAt())
-                    // 수정.
                     .isMyPost(true)
                     .build();
 
