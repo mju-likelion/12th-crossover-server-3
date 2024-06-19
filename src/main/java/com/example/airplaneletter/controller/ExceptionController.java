@@ -42,6 +42,11 @@ public class ExceptionController {
 
         log.error("({}){}: {}", exceptionName, errorCode.getMessage(), detail);
     }
+
+    private void writeLog(Exception exception) {
+        log.error("({}){}", exception.getClass().getSimpleName(), exception.getMessage());
+    }
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleNotFoundException(
@@ -50,9 +55,16 @@ public class ExceptionController {
         this.writeLog(notFoundException);
         return new ResponseEntity<>(ErrorResponseDto.res(notFoundException), HttpStatus.NOT_FOUND);
     }
-    private void writeLog(Exception exception) {
-        log.error("({}){}", exception.getClass().getSimpleName(), exception.getMessage());
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponseDto> handleUnauthorizedException(
+            UnauthorizedException unauthorizedException) {
+
+        this.writeLog(unauthorizedException);
+        return new ResponseEntity<>(ErrorResponseDto.res(unauthorizedException), HttpStatus.UNAUTHORIZED);
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDto> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException methodArgumentNotValidException) {

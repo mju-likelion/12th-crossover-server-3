@@ -5,6 +5,9 @@ import com.example.airplaneletter.authentication.token.JwtEncoder;
 import com.example.airplaneletter.authentication.token.JwtTokenProvider;
 import com.example.airplaneletter.dto.CreateUserDto;
 import com.example.airplaneletter.dto.LoginDto;
+import com.example.airplaneletter.errorCode.ErrorCode;
+import com.example.airplaneletter.exception.NotFoundException;
+import com.example.airplaneletter.exception.UnauthorizedException;
 import com.example.airplaneletter.model.User;
 import com.example.airplaneletter.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,11 +43,11 @@ public class UserService {
 
         User user = this.userRepository.findByEmail(loginDto.getEmail());
         if(user == null) {
-            throw new RuntimeException("User not found");
+            throw new NotFoundException(ErrorCode.USER_NOT_FOUND);
         }
 
         if (!passwordHashEncryption.matches(loginDto.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Incorrect password");
+            throw new UnauthorizedException(ErrorCode.UNAUTHORIZED_USER);
         }
 
         String payload = user.getId().toString();

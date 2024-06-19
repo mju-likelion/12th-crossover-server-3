@@ -1,6 +1,8 @@
 package com.example.airplaneletter.service;
 
 import com.example.airplaneletter.dto.CreateCommentDto;
+import com.example.airplaneletter.errorCode.ErrorCode;
+import com.example.airplaneletter.exception.NotFoundException;
 import com.example.airplaneletter.model.Comment;
 import com.example.airplaneletter.model.Post;
 import com.example.airplaneletter.model.User;
@@ -20,7 +22,7 @@ public class CommentService {
 
     // 댓글 달기
     public void createComment(CreateCommentDto createCommentDto, UUID postId, User user) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException(ErrorCode.POST_NOT_FOUND));
 
         // 새 댓글 생성
         Comment comment = Comment.builder()
@@ -39,7 +41,6 @@ public class CommentService {
 
     // 댓글 삭제
     public void deleteComment(UUID commentId) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("Comment not found"));
-        this.commentRepository.delete(comment);
+        this.commentRepository.deleteById(commentId);
     }
 }
