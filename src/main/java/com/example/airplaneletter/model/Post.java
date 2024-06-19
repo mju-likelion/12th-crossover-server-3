@@ -20,7 +20,7 @@ public class Post extends BaseEntity {
     @Column(length = 100, nullable = false)
     private String content;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Comment> comments;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)

@@ -1,5 +1,6 @@
 package com.example.airplaneletter.controller;
 
+import com.example.airplaneletter.authentication.user.AuthenticatedUser;
 import com.example.airplaneletter.dto.PostDto;
 import com.example.airplaneletter.dto.ResponseDto;
 import com.example.airplaneletter.model.User;
