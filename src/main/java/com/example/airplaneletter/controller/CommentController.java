@@ -3,9 +3,12 @@ package com.example.airplaneletter.controller;
 import com.example.airplaneletter.authentication.user.AuthenticatedUser;
 import com.example.airplaneletter.dto.CreateCommentDto;
 import com.example.airplaneletter.dto.CreateUserDto;
+import com.example.airplaneletter.dto.ResponseDto;
 import com.example.airplaneletter.model.User;
 import com.example.airplaneletter.service.CommentService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -18,15 +21,17 @@ public class CommentController {
 
     // 댓글 달기
     @PostMapping("/posts/{postId}/comments")
-    public void createComment(@RequestBody CreateCommentDto createCommentDto,
-                              @PathVariable UUID postId,
-                              @AuthenticatedUser User user) {
+    public ResponseEntity<ResponseDto<Void>> createComment(@RequestBody CreateCommentDto createCommentDto,
+                                                           @PathVariable UUID postId,
+                                                           @AuthenticatedUser User user) {
         this.commentService.createComment(createCommentDto, postId, user);
+        return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "Comment created"), HttpStatus.OK);
     }
 
     // 댓글 삭제
     @DeleteMapping("/posts/comments/{commentId}")
-    public void deleteComment(@PathVariable UUID commentId) {
+    public ResponseEntity<ResponseDto<Void>> deleteComment(@PathVariable UUID commentId) {
         this.commentService.deleteComment(commentId);
+        return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "Comment deleted"), HttpStatus.OK);
     }
 }
