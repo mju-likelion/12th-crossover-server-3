@@ -40,15 +40,21 @@ public class PostController {
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.CREATED, "ok", postResponseData), HttpStatus.CREATED);
 
     }
-
+    // RequestHeader 로 수정.
     @DeleteMapping("/{postId}")
+<<<<<<< HEAD
     public ResponseEntity<ResponseDto<Void>> deletePost(@AuthenticatedUser User user, @RequestHeader UUID postId) {
+=======
+>>>>>>> d70e691604a44eedce682afbd60d0dbbcd930fd6
         postService.deletePost(user, postId);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "ok"), HttpStatus.OK);
 
     }
     @GetMapping("/{postId}")
+<<<<<<< HEAD
     public ResponseEntity<ResponseDto<DetailedPostResponseData>> getPostDetails(@AuthenticatedUser User user, @RequestHeader UUID postId) {
+=======
+>>>>>>> d70e691604a44eedce682afbd60d0dbbcd930fd6
         DetailedPostResponseData postResponseData = postService.getPostDetails(user, postId);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "ok", postResponseData), HttpStatus.OK);
     }

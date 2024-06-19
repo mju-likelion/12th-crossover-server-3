@@ -32,6 +32,9 @@ public class PostService {
                     .content(post.getContent())
                     .writer(post.getWriter().getNickname())
                     .createdAt(post.getCreatedAt())
+<<<<<<< HEAD
+=======
+>>>>>>> d70e691604a44eedce682afbd60d0dbbcd930fd6
                     .isMyPost(true)
                     .build();
 
