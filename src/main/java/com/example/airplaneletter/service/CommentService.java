@@ -1,5 +1,6 @@
 package com.example.airplaneletter.service;
 
+import com.example.airplaneletter.dto.CommentData;
 import com.example.airplaneletter.dto.CreateCommentDto;
 import com.example.airplaneletter.errorCode.ErrorCode;
 import com.example.airplaneletter.exception.NotFoundException;
@@ -8,13 +9,20 @@ import com.example.airplaneletter.model.Post;
 import com.example.airplaneletter.model.User;
 import com.example.airplaneletter.repository.CommentRepository;
 import com.example.airplaneletter.repository.PostRepository;
+import com.example.airplaneletter.response.AllCommentsResponseData;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class CommentService {
 
     private final CommentRepository commentRepository;
@@ -42,5 +50,29 @@ public class CommentService {
     // 댓글 삭제
     public void deleteComment(UUID commentId) {
         this.commentRepository.deleteById(commentId);
+    }
+    public AllCommentsResponseData getComments(User user, UUID postId, Pageable pageable){
+        Page<Comment> commentsPage = this.commentRepository.findByPostId(postId, pageable);
+        List<CommentData> commentDataList = new ArrayList<>();
+        // 특정 post의 모든 comments 가져오기.
+        for (Comment comment : commentsPage.getContent()) {
+            boolean isMine = comment.getWriter().getId().equals(user.getId());
+            CommentData commentData = new CommentData(
+                    comment.getContent(),
+                    comment.getWriter().getNickname(),
+                    isMine,
+                    comment.getCreatedAt()
+            );
+            commentDataList.add(commentData);
+        }
+        // 해당 commentsList 를 pagination 으로 내보내기
+        AllCommentsResponseData responseData = new AllCommentsResponseData(
+                commentDataList,
+                commentsPage.getNumber(),
+                commentsPage.getTotalPages(),
+                commentsPage.getTotalElements()
+        );
+
+        return responseData;
     }
 }
