@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 public class CreateUserDto {
     @NotBlank(message = "닉네임이 비어있습니다.")
@@ -20,4 +22,6 @@ public class CreateUserDto {
     @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,16}", message = "비밀번호는 영문과 숫자, 특수기호를 사용해야합니다.")
     @Size(min = 8, max = 13, message = "비밀번호는 8자 이상 13자 이하여야 합니다.")
     private String password;
+
+    private List<TermDto> agreements;
 }

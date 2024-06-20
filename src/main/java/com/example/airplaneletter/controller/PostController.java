@@ -38,9 +38,8 @@ public class PostController {
     public ResponseEntity<ResponseDto<DetailedPostResponseData>> createPost(@AuthenticatedUser User user, @RequestBody PostDto postDto) {
         DetailedPostResponseData postResponseData = postService.createPost(user, postDto);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.CREATED, "ok", postResponseData), HttpStatus.CREATED);
-
     }
-    // RequestHeader 로 수정.
+
     @DeleteMapping("/{postId}")
     public ResponseEntity<ResponseDto<Void>> deletePost(@AuthenticatedUser User user, @PathVariable UUID postId) {
         postService.deletePost(user, postId);
