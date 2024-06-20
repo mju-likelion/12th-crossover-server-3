@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity(name = "term")
 public class Term extends BaseEntity {
-
     @Column(length = 2000, nullable = false)
     private String content;
 }
