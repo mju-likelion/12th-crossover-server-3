@@ -13,7 +13,9 @@ import com.example.airplaneletter.response.AllCommentsResponseData;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -52,6 +54,9 @@ public class CommentService {
         this.commentRepository.deleteById(commentId);
     }
     public AllCommentsResponseData getComments(User user, UUID postId, Pageable pageable){
+        // 정렬
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("createdAt").descending());
+
         Page<Comment> commentsPage = this.commentRepository.findByPostId(postId, pageable);
         List<CommentData> commentDataList = new ArrayList<>();
         // 특정 post의 모든 comments 가져오기.
