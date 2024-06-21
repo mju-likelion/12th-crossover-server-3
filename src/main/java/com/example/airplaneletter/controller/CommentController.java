@@ -3,10 +3,12 @@ package com.example.airplaneletter.controller;
 import com.example.airplaneletter.authentication.user.AuthenticatedUser;
 import com.example.airplaneletter.dto.comment.CreateCommentDto;
 import com.example.airplaneletter.dto.ResponseDto;
+import com.example.airplaneletter.dto.response.comment.CommentResponseData;
 import com.example.airplaneletter.model.User;
 import com.example.airplaneletter.dto.response.comment.CommentListResponseData;
 import com.example.airplaneletter.service.CommentService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+import java.util.concurrent.CompletionException;
 
 @RestController
 @AllArgsConstructor
@@ -39,11 +42,11 @@ public class CommentController {
 
     // 전체 댓글 조회
     @GetMapping("/posts/{postId}/comments")
-    public ResponseEntity<ResponseDto<CommentListResponseData>> getComments(@AuthenticatedUser User user, @PathVariable UUID postId,
+    public ResponseEntity<ResponseDto<Page<CommentResponseData>>> getComments(@AuthenticatedUser User user, @PathVariable UUID postId,
                                                                             @RequestParam(defaultValue = "0") int page,
                                                                             @RequestParam(defaultValue = "10") int size){
         Pageable pageable = PageRequest.of(page, size);
-        CommentListResponseData allCommentsResponseData = commentService.getComments(user, postId, pageable);
-        return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "OK", allCommentsResponseData), HttpStatus.OK);
+        Page<CommentResponseData> commentResponseData = commentService.getComments(user, postId, pageable);
+        return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "OK", commentResponseData), HttpStatus.OK);
     }
 }
