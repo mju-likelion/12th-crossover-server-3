@@ -67,13 +67,6 @@ public class CommentService {
             );
             commentDataList.add(commentData);
         }
-        // 해당 commentsList 를 pagination 으로 내보내기
-        CommentListResponseData responseData = new CommentListResponseData(
-                commentDataList,
-                commentsPage.getNumber(),
-                commentsPage.getTotalPages(),
-                commentsPage.getTotalElements()
-        );
 
         return new PageImpl<>(commentDataList, pageable, commentsPage.getTotalElements());
     }
