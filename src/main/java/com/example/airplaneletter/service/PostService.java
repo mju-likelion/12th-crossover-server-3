@@ -7,9 +7,7 @@ import com.example.airplaneletter.repository.PostRepository;
 import com.example.airplaneletter.response.AllPostsResponseData;
 import com.example.airplaneletter.response.DetailedPostResponseData;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,12 +19,13 @@ import java.util.UUID;
 public class PostService {
     private final PostRepository postRepository;
     public Page<AllPostsResponseData> getAllPosts(User user, Pageable pageable) {
-        // 모든 포스트 조회하기
+        //정렬
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("createdAt").descending());
+
         Page<Post> postPage = postRepository.findAll(pageable);
         List<AllPostsResponseData> postList = new ArrayList<>();
 
         for (Post post : postPage) {
-            // 이때는 comments 가 없다.
             AllPostsResponseData postData = AllPostsResponseData.builder()
                     .title(post.getTitle())
                     .content(post.getContent())

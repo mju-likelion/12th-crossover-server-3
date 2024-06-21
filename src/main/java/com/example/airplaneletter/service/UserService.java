@@ -5,10 +5,15 @@ import com.example.airplaneletter.authentication.token.JwtEncoder;
 import com.example.airplaneletter.authentication.token.JwtTokenProvider;
 import com.example.airplaneletter.dto.CreateUserDto;
 import com.example.airplaneletter.dto.LoginDto;
+import com.example.airplaneletter.dto.TermDto;
 import com.example.airplaneletter.errorCode.ErrorCode;
 import com.example.airplaneletter.exception.NotFoundException;
 import com.example.airplaneletter.exception.UnauthorizedException;
+import com.example.airplaneletter.model.Term;
+import com.example.airplaneletter.model.TermUser;
 import com.example.airplaneletter.model.User;
+import com.example.airplaneletter.repository.TermRepository;
+import com.example.airplaneletter.repository.TermUserRepository;
 import com.example.airplaneletter.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -24,6 +29,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordHashEncryption passwordHashEncryption;
     private final JwtTokenProvider jwtTokenProvider;
+    private TermRepository termRepository;
+    private TermUserRepository termUserRepository;
+
 
     // 회원 가입
     public void createUser(CreateUserDto createUserDto) {
@@ -35,6 +43,21 @@ public class UserService {
                 .nickname(createUserDto.getNickname())
                 .password(encryptedPassword)
                 .build();
+        // 약관 동의
+        for (TermDto termDto : createUserDto.getAgreements()) {
+            Term agreed = termRepository.findTermById(termDto.getTermId());
+            if(agreed == null){
+                throw new RuntimeException("약관에 동의해 주세요");
+            }
+            TermUser termUser = TermUser.builder()
+                    .term(agreed)
+                    .user(user)
+                    .agreed(termDto.isAgreed())
+                    .build();
+
+            termUserRepository.save(termUser);
+        }
+
         userRepository.save(user);
     }
 
