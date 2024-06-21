@@ -1,4 +1,4 @@
-package com.example.airplaneletter.dto;
+package com.example.airplaneletter.dto.error;
 
 import com.example.airplaneletter.exception.CustomException;
 import lombok.AllArgsConstructor;

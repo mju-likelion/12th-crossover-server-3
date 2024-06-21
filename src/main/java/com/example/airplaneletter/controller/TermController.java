@@ -1,8 +1,8 @@
 package com.example.airplaneletter.controller;
 
-import com.example.airplaneletter.dto.CreateTermDto;
+import com.example.airplaneletter.dto.term.CreateTermDto;
 import com.example.airplaneletter.dto.ResponseDto;
-import com.example.airplaneletter.response.AllTermsResponseData;
+import com.example.airplaneletter.dto.response.term.TermListResponseData;
 import com.example.airplaneletter.service.TermService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class TermController {
     private final TermService termService;
     @GetMapping("/terms")
-    public ResponseEntity<ResponseDto<AllTermsResponseData>> getAllTerms() {
-            AllTermsResponseData allTermsResponseData = this.termService.getAllTerms();
+    public ResponseEntity<ResponseDto<TermListResponseData>> getAllTerms() {
+            TermListResponseData allTermsResponseData = this.termService.getAllTerms();
             return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "ok", allTermsResponseData), HttpStatus.OK);
     }
 

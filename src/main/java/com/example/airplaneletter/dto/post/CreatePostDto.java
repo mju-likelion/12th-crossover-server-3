@@ -1,11 +1,10 @@
-package com.example.airplaneletter.dto;
+package com.example.airplaneletter.dto.post;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
-public class PostDto {
+public class CreatePostDto {
     // NotBlank 수정.
     @NotBlank(message = "제목을 입력해 주세요")
     String title;

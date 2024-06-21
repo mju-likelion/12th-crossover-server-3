@@ -1,10 +1,10 @@
 package com.example.airplaneletter.service;
 
-import com.example.airplaneletter.dto.CreateTermDto;
+import com.example.airplaneletter.dto.term.CreateTermDto;
 import com.example.airplaneletter.model.Term;
 import com.example.airplaneletter.repository.TermRepository;
-import com.example.airplaneletter.response.AllTermsResponseData;
-import com.example.airplaneletter.response.TermResponseData;
+import com.example.airplaneletter.dto.response.term.TermListResponseData;
+import com.example.airplaneletter.dto.response.term.TermResponseData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ import java.util.List;
 public class TermService {
     private final TermRepository termRepository;
 
-    public AllTermsResponseData getAllTerms() {
+    public TermListResponseData getAllTerms() {
         List<TermResponseData> termList = new ArrayList<>();
 
         for (Term t : termRepository.findAll()) {
@@ -26,7 +26,7 @@ public class TermService {
                     .build();
             termList.add(termResponseData);
         }
-        AllTermsResponseData termResponseDataList = AllTermsResponseData.builder().terms(termList).build();
+        TermListResponseData termResponseDataList = TermListResponseData.builder().terms(termList).build();
         return termResponseDataList;
     }
 

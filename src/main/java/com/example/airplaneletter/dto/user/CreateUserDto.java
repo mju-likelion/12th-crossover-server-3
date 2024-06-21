@@ -1,9 +1,11 @@
-package com.example.airplaneletter.dto;
+package com.example.airplaneletter.dto.user;
 
+import com.example.airplaneletter.dto.term.TermDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
 
@@ -20,7 +22,7 @@ public class CreateUserDto {
 
     @NotBlank(message = "비밀번호가 비어있습니다.")
     @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,16}", message = "비밀번호는 영문과 숫자, 특수기호를 사용해야합니다.")
-    @Size(min = 8, max = 13, message = "비밀번호는 8자 이상 13자 이하여야 합니다.")
+    @Length(min = 8, max = 13, message = "비밀번호는 8자 이상 13자 이하여야 합니다.")
     private String password;
 
     private List<TermDto> agreements;

@@ -25,8 +25,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String accessToken = AuthenticationExtractor.extractTokenFromRequest(request);
-        UUID empId = UUID.fromString(jwtTokenProvider.getPayload(accessToken));
-        User user = this.userRepository.findById(empId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+        UUID userId = UUID.fromString(jwtTokenProvider.getPayload(accessToken));
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
         authenticationContext.setPrincipal(user);
         return true;
     }
