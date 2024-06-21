@@ -1,4 +1,4 @@
-package com.example.airplaneletter.response;
+package com.example.airplaneletter.dto.response.term;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

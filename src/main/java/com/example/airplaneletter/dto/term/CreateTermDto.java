@@ -1,4 +1,4 @@
-package com.example.airplaneletter.dto;
+package com.example.airplaneletter.dto.term;
 
 import lombok.Getter;
 

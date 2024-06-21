@@ -1,10 +1,10 @@
 package com.example.airplaneletter.controller;
 
 import com.example.airplaneletter.authentication.user.AuthenticatedUser;
-import com.example.airplaneletter.dto.CreateCommentDto;
+import com.example.airplaneletter.dto.comment.CreateCommentDto;
 import com.example.airplaneletter.dto.ResponseDto;
 import com.example.airplaneletter.model.User;
-import com.example.airplaneletter.response.AllCommentsResponseData;
+import com.example.airplaneletter.dto.response.comment.CommentListResponseData;
 import com.example.airplaneletter.service.CommentService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -39,11 +39,11 @@ public class CommentController {
 
     // 전체 댓글 조회
     @GetMapping("/posts/{postId}/comments")
-    public ResponseEntity<ResponseDto<AllCommentsResponseData>> getComments(@AuthenticatedUser User user, @PathVariable UUID postId,
+    public ResponseEntity<ResponseDto<CommentListResponseData>> getComments(@AuthenticatedUser User user, @PathVariable UUID postId,
                                                                             @RequestParam(defaultValue = "0") int page,
                                                                             @RequestParam(defaultValue = "10") int size){
         Pageable pageable = PageRequest.of(page, size);
-        AllCommentsResponseData allCommentsResponseData = commentService.getComments(user, postId, pageable);
+        CommentListResponseData allCommentsResponseData = commentService.getComments(user, postId, pageable);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "OK", allCommentsResponseData), HttpStatus.OK);
     }
 }

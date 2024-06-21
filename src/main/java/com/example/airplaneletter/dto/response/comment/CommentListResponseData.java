@@ -1,6 +1,5 @@
-package com.example.airplaneletter.response;
+package com.example.airplaneletter.dto.response.comment;
 
-import com.example.airplaneletter.dto.CommentData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,8 +9,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @Getter
-public class AllCommentsResponseData {
-    private List<CommentData> comments;
+public class CommentListResponseData {
+    private List<CommentResponseData> comments;
     private int currentPage;
     private int totalPages;
     private long totalComments;

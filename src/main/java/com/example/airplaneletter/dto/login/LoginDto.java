@@ -1,4 +1,4 @@
-package com.example.airplaneletter.dto;
+package com.example.airplaneletter.dto.login;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

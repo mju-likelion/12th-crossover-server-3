@@ -1,11 +1,8 @@
 package com.example.airplaneletter.controller;
 
-import com.example.airplaneletter.dto.ErrorResponseDto;
+import com.example.airplaneletter.dto.error.ErrorResponseDto;
 import com.example.airplaneletter.errorCode.ErrorCode;
-import com.example.airplaneletter.exception.CustomException;
-import com.example.airplaneletter.exception.DtoValidationException;
-import com.example.airplaneletter.exception.NotFoundException;
-import com.example.airplaneletter.exception.UnauthorizedException;
+import com.example.airplaneletter.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +60,15 @@ public class ExceptionController {
 
         this.writeLog(unauthorizedException);
         return new ResponseEntity<>(ErrorResponseDto.res(unauthorizedException), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ErrorResponseDto> handleConflictException(
+            ConflictException conflictException) {
+
+        this.writeLog(conflictException);
+        return new ResponseEntity<>(ErrorResponseDto.res(conflictException), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -1,7 +1,7 @@
 package com.example.airplaneletter.service;
 
-import com.example.airplaneletter.dto.CommentData;
-import com.example.airplaneletter.dto.CreateCommentDto;
+import com.example.airplaneletter.dto.response.comment.CommentResponseData;
+import com.example.airplaneletter.dto.comment.CreateCommentDto;
 import com.example.airplaneletter.errorCode.ErrorCode;
 import com.example.airplaneletter.exception.NotFoundException;
 import com.example.airplaneletter.model.Comment;
@@ -9,7 +9,7 @@ import com.example.airplaneletter.model.Post;
 import com.example.airplaneletter.model.User;
 import com.example.airplaneletter.repository.CommentRepository;
 import com.example.airplaneletter.repository.PostRepository;
-import com.example.airplaneletter.response.AllCommentsResponseData;
+import com.example.airplaneletter.dto.response.comment.CommentListResponseData;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -53,16 +53,16 @@ public class CommentService {
     public void deleteComment(UUID commentId) {
         this.commentRepository.deleteById(commentId);
     }
-    public AllCommentsResponseData getComments(User user, UUID postId, Pageable pageable){
+    public CommentListResponseData getComments(User user, UUID postId, Pageable pageable){
         // 정렬
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("createdAt").descending());
 
         Page<Comment> commentsPage = this.commentRepository.findByPostId(postId, pageable);
-        List<CommentData> commentDataList = new ArrayList<>();
+        List<CommentResponseData> commentDataList = new ArrayList<>();
         // 특정 post의 모든 comments 가져오기.
         for (Comment comment : commentsPage.getContent()) {
             boolean isMine = comment.getWriter().getId().equals(user.getId());
-            CommentData commentData = new CommentData(
+            CommentResponseData commentData = new CommentResponseData(
                     comment.getContent(),
                     comment.getWriter().getNickname(),
                     isMine,
@@ -71,7 +71,7 @@ public class CommentService {
             commentDataList.add(commentData);
         }
         // 해당 commentsList 를 pagination 으로 내보내기
-        AllCommentsResponseData responseData = new AllCommentsResponseData(
+        CommentListResponseData responseData = new CommentListResponseData(
                 commentDataList,
                 commentsPage.getNumber(),
                 commentsPage.getTotalPages(),
