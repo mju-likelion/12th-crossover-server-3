@@ -1,5 +1,6 @@
 package com.example.airplaneletter.dto.response.post;
 
+import com.example.airplaneletter.dto.response.comment.CommentResponseData;
 import com.example.airplaneletter.model.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,7 @@ public class PostWithCommentResponseData {
     private final String title;
     private final String content;
     private final String nickname;
-    private final List<Comment> comments;
+    private final List<CommentResponseData> comments;
     private final LocalDateTime createdAt;
     private final boolean isMyPost;
 }

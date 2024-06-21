@@ -13,6 +13,6 @@ public class CommentResponseData {
     // 댓글 내용, 닉네임, 본인 여부, 작성시간
     private String content;
     private String author;
-    private boolean isMine;
+    private boolean IsMyComment;
     private LocalDateTime createdAt;
 }

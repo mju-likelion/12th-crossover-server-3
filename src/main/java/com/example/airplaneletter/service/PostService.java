@@ -1,9 +1,12 @@
 package com.example.airplaneletter.service;
 
 import com.example.airplaneletter.dto.post.CreatePostDto;
+import com.example.airplaneletter.dto.response.comment.CommentListResponseData;
+import com.example.airplaneletter.dto.response.comment.CommentResponseData;
 import com.example.airplaneletter.errorCode.ErrorCode;
 import com.example.airplaneletter.exception.NotFoundException;
 import com.example.airplaneletter.exception.UnauthorizedException;
+import com.example.airplaneletter.model.Comment;
 import com.example.airplaneletter.model.Post;
 import com.example.airplaneletter.model.User;
 import com.example.airplaneletter.repository.PostRepository;
@@ -34,7 +37,8 @@ public class PostService {
                     .content(post.getContent())
                     .writer(post.getWriter().getNickname())
                     .createdAt(post.getCreatedAt())
-                    .isMyPost(post.getWriter().getId().equals(user.getId()))
+                    .IsMyPost(post.getWriter().getId().equals(user.getId()))
+                    .postId(post.getId())
                     .build();
 
             postList.add(postData);
@@ -76,18 +80,28 @@ public class PostService {
         // 특정 포스트 조회하기.
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.POST_NOT_FOUND, "해당 post 를 찾을 수 없습니다."));
+        List<CommentResponseData> commentResponseData = new ArrayList<>();
         boolean isMyPost = isPostOwner(user, post);
-
+        // comment -> CommentResponseData로 수정.
+        for(Comment c : post.getComments()) {
+            commentResponseData.add(CommentResponseData.builder()
+                            .author(c.getWriter().getNickname())
+                            .createdAt(c.getCreatedAt())
+                            .content(c.getContent())
+                            .IsMyComment(c.getWriter().getId().equals(user.getId()))
+                    .build());
+        }
         return PostWithCommentResponseData.builder()
                 // comments 를 볼 수 있다.
                 .title(post.getTitle())
                 .content(post.getContent())
                 .nickname(post.getWriter().getNickname())
-                .comments(post.getComments())
+                .comments(commentResponseData)
                 .isMyPost(isMyPost)
                 .createdAt(post.getCreatedAt())
                 .build();
     }
+
     private boolean isPostOwner(User user, Post post){
         if(post.getWriter().equals(user)){
             return true;
