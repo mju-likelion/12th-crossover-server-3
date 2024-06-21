@@ -3,10 +3,11 @@ package com.example.airplaneletter.service;
 import com.example.airplaneletter.authentication.PasswordHashEncryption;
 import com.example.airplaneletter.authentication.token.JwtEncoder;
 import com.example.airplaneletter.authentication.token.JwtTokenProvider;
-import com.example.airplaneletter.dto.CreateUserDto;
-import com.example.airplaneletter.dto.LoginDto;
-import com.example.airplaneletter.dto.TermDto;
+import com.example.airplaneletter.dto.user.CreateUserDto;
+import com.example.airplaneletter.dto.login.LoginDto;
+import com.example.airplaneletter.dto.term.TermDto;
 import com.example.airplaneletter.errorCode.ErrorCode;
+import com.example.airplaneletter.exception.ConflictException;
 import com.example.airplaneletter.exception.NotFoundException;
 import com.example.airplaneletter.exception.UnauthorizedException;
 import com.example.airplaneletter.model.Term;
@@ -35,6 +36,8 @@ public class UserService {
 
     // 회원 가입
     public void createUser(CreateUserDto createUserDto) {
+        // 이메일 중복 검사
+        this.isEmailExist(createUserDto.getEmail());
 
         String encryptedPassword = this.passwordHashEncryption.encrypt(createUserDto.getPassword());
 
@@ -59,6 +62,14 @@ public class UserService {
         }
 
         userRepository.save(user);
+    }
+
+    // 이메일 중복 검사
+    public void isEmailExist(String email) {
+        User user = this.userRepository.findByEmail(email);
+        if (user != null) {
+            throw new ConflictException(ErrorCode.EMAIL_ALREADY_EXISTS);
+        }
     }
 
     // 로그인

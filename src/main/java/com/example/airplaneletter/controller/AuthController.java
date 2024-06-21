@@ -1,7 +1,7 @@
 package com.example.airplaneletter.controller;
 
-import com.example.airplaneletter.dto.CreateUserDto;
-import com.example.airplaneletter.dto.LoginDto;
+import com.example.airplaneletter.dto.user.CreateUserDto;
+import com.example.airplaneletter.dto.login.LoginDto;
 import com.example.airplaneletter.dto.ResponseDto;
 import com.example.airplaneletter.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;

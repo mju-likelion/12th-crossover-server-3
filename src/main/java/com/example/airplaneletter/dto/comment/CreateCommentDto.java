@@ -1,4 +1,4 @@
-package com.example.airplaneletter.dto;
+package com.example.airplaneletter.dto.comment;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
