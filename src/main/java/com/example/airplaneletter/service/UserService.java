@@ -49,8 +49,8 @@ public class UserService {
         // 약관 동의
         for (TermDto termDto : createUserDto.getAgreements()) {
             Term agreed = termRepository.findTermById(termDto.getTermId());
-            if(agreed == null){
-                throw new RuntimeException("약관에 동의해 주세요");
+            if(termDto.isAgreed() == false){
+                throw new NotFoundException(ErrorCode.MISSING_TERMS, "약관에 동의해 주세요");
             }
             TermUser termUser = TermUser.builder()
                     .term(agreed)

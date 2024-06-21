@@ -31,6 +31,7 @@ public class TermService {
     }
 
     public void createTerm(CreateTermDto createTermDto){
+
         Term term = Term.builder()
                 .content(createTermDto.getContent())
                 .build();

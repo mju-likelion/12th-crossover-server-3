@@ -1,6 +1,12 @@
 package com.example.airplaneletter.service;
 
 import com.example.airplaneletter.dto.post.CreatePostDto;
+import com.example.airplaneletter.dto.response.comment.CommentListResponseData;
+import com.example.airplaneletter.dto.response.comment.CommentResponseData;
+import com.example.airplaneletter.errorCode.ErrorCode;
+import com.example.airplaneletter.exception.NotFoundException;
+import com.example.airplaneletter.exception.UnauthorizedException;
+import com.example.airplaneletter.model.Comment;
 import com.example.airplaneletter.model.Post;
 import com.example.airplaneletter.model.User;
 import com.example.airplaneletter.repository.PostRepository;
@@ -31,7 +37,8 @@ public class PostService {
                     .content(post.getContent())
                     .writer(post.getWriter().getNickname())
                     .createdAt(post.getCreatedAt())
-                    .isMyPost(true)
+                    .IsMyPost(post.getWriter().getId().equals(user.getId()))
+                    .postId(post.getId())
                     .build();
 
             postList.add(postData);
@@ -52,35 +59,49 @@ public class PostService {
                 .title(postDto.getTitle())
                 .content(postDto.getContent())
                 .nickname(post.getWriter().getNickname())
+                .isMyPost(true)
                 .build();
         return postResponseData;
     }
     public void deletePost(User user, UUID postId) {
         // 포스트 삭제하기.
         Post oldPost = postRepository.findPostById(postId);
+        if(oldPost == null) {
+                throw new NotFoundException(ErrorCode.POST_NOT_FOUND, "해당 post 를 찾을 수 없습니다.");
+        }
 
         if (isPostOwner(user, oldPost)) {
             this.postRepository.delete(oldPost);
         } else {
-            throw new RuntimeException("해당 게시글을 삭제할 수 없습니다.");
+            throw new UnauthorizedException(ErrorCode.FORBIDDEN_USER, "해당 게시글을 삭제할 수 없습니다.");
         }
     }
     public PostWithCommentResponseData getPostDetails(User user, UUID postId){
         // 특정 포스트 조회하기.
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("Post not found."));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.POST_NOT_FOUND, "해당 post 를 찾을 수 없습니다."));
+        List<CommentResponseData> commentResponseData = new ArrayList<>();
         boolean isMyPost = isPostOwner(user, post);
-
+        // comment -> CommentResponseData로 수정.
+        for(Comment c : post.getComments()) {
+            commentResponseData.add(CommentResponseData.builder()
+                            .author(c.getWriter().getNickname())
+                            .createdAt(c.getCreatedAt())
+                            .content(c.getContent())
+                            .IsMyComment(c.getWriter().getId().equals(user.getId()))
+                    .build());
+        }
         return PostWithCommentResponseData.builder()
                 // comments 를 볼 수 있다.
                 .title(post.getTitle())
                 .content(post.getContent())
                 .nickname(post.getWriter().getNickname())
-                .comments(post.getComments())
+                .comments(commentResponseData)
                 .isMyPost(isMyPost)
                 .createdAt(post.getCreatedAt())
                 .build();
     }
+
     private boolean isPostOwner(User user, Post post){
         if(post.getWriter().equals(user)){
             return true;
