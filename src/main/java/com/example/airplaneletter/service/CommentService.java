@@ -12,10 +12,7 @@ import com.example.airplaneletter.repository.PostRepository;
 import com.example.airplaneletter.dto.response.comment.CommentListResponseData;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -53,7 +50,7 @@ public class CommentService {
     public void deleteComment(UUID commentId) {
         this.commentRepository.deleteById(commentId);
     }
-    public CommentListResponseData getComments(User user, UUID postId, Pageable pageable){
+    public Page<CommentResponseData> getComments(User user, UUID postId, Pageable pageable){
         // 정렬
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("createdAt").descending());
 
@@ -70,14 +67,7 @@ public class CommentService {
             );
             commentDataList.add(commentData);
         }
-        // 해당 commentsList 를 pagination 으로 내보내기
-        CommentListResponseData responseData = new CommentListResponseData(
-                commentDataList,
-                commentsPage.getNumber(),
-                commentsPage.getTotalPages(),
-                commentsPage.getTotalElements()
-        );
 
-        return responseData;
+        return new PageImpl<>(commentDataList, pageable, commentsPage.getTotalElements());
     }
 }
