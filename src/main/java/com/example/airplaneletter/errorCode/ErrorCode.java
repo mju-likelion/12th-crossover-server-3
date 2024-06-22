@@ -23,7 +23,7 @@ public enum ErrorCode {
 
     // 404 Not Found
     POST_NOT_FOUND("4040", "해당 포스트를 찾을 수 없습니다."),
-    USER_NOT_FOUND("4041", "해당 유저를 찾을 수 없습니다."),
+    USER_NOT_FOUND("4041", "해당 유저를 찾을 수 없습니다. "),
     COMMENT_NOT_FOUND("4042", "해당 댓글을 찾을 수 없습니다."),
 
     // 405 Using wrong HTTP Method
