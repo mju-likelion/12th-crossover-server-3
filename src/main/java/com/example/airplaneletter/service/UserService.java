@@ -98,6 +98,8 @@ public class UserService {
     public void logout(HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from("AccessToken", null)
                 .maxAge(0)
+                .httpOnly(true)
+                .sameSite("None").secure(true)
                 .path("/")
                 .build();
         response.addHeader("Set-Cookie", cookie.toString());
