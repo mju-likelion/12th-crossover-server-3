@@ -88,6 +88,8 @@ public class UserService {
         String accessToken = jwtTokenProvider.createToken(payload);
         ResponseCookie cookie = ResponseCookie.from("AccessToken", JwtEncoder.encodeJwtBearerToken(accessToken))
                 .maxAge(Duration.ofMillis(1800000))
+                .httpOnly(true)
+                .sameSite("None").secure(true)
                 .path("/")
                 .build();
         response.addHeader("Set-Cookie", cookie.toString());
