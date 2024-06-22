@@ -86,11 +86,15 @@ public class UserService {
 
         String payload = user.getId().toString();
         String accessToken = jwtTokenProvider.createToken(payload);
+
         ResponseCookie cookie = ResponseCookie.from("AccessToken", JwtEncoder.encodeJwtBearerToken(accessToken))
                 .maxAge(Duration.ofMillis(1800000))
+                .sameSite("None").secure(true)
+                .httpOnly(true)
                 .path("/")
                 .build();
         response.addHeader("Set-Cookie", cookie.toString());
+
     }
 
     // 로그아웃

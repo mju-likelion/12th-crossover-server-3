@@ -36,6 +36,7 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<ResponseDto<PostWithCommentResponseData>> createPost(@AuthenticatedUser User user, @RequestBody CreatePostDto postDto) {
+        System.out.println("create post");
         PostWithCommentResponseData postResponseData = postService.createPost(user, postDto);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.CREATED, "ok", postResponseData), HttpStatus.CREATED);
     }

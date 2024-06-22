@@ -102,6 +102,7 @@ public class PostService {
                 .build();
     }
 
+
     private boolean isPostOwner(User user, Post post){
         if(post.getWriter().equals(user)){
             return true;

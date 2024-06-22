@@ -4,6 +4,7 @@ import com.example.airplaneletter.dto.response.comment.CommentResponseData;
 import com.example.airplaneletter.dto.comment.CreateCommentDto;
 import com.example.airplaneletter.errorCode.ErrorCode;
 import com.example.airplaneletter.exception.NotFoundException;
+import com.example.airplaneletter.exception.UnauthorizedException;
 import com.example.airplaneletter.model.Comment;
 import com.example.airplaneletter.model.Post;
 import com.example.airplaneletter.model.User;
@@ -29,6 +30,8 @@ public class CommentService {
 
     // 댓글 달기
     public void createComment(CreateCommentDto createCommentDto, UUID postId, User user) {
+
+
         Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException(ErrorCode.POST_NOT_FOUND));
 
         // 새 댓글 생성
@@ -47,9 +50,22 @@ public class CommentService {
     }
 
     // 댓글 삭제
-    public void deleteComment(UUID commentId) {
+    public void deleteComment(UUID commentId, User user) {
+        // 자신이 작성한 댓글인지 확인
+        this.isMyComment(commentId, user);
         this.commentRepository.deleteById(commentId);
     }
+
+    // 자신이 작성한 댓글인지 확인
+    public void isMyComment(UUID commentId, User user) {
+        Comment comment = this.commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException(ErrorCode.COMMENT_NOT_FOUND));
+        if(!comment.getWriter().equals(user)) {
+            throw new UnauthorizedException(ErrorCode.FORBIDDEN_USER, "해당 댓글의 작성자가 아닙니다.");
+        }
+    }
+
+
+    // 댓글 조회
     public Page<CommentResponseData> getComments(User user, UUID postId, Pageable pageable){
         // 정렬
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("createdAt").descending());
