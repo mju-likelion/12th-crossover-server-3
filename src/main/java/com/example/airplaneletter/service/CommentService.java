@@ -4,12 +4,12 @@ import com.example.airplaneletter.dto.response.comment.CommentResponseData;
 import com.example.airplaneletter.dto.comment.CreateCommentDto;
 import com.example.airplaneletter.errorCode.ErrorCode;
 import com.example.airplaneletter.exception.NotFoundException;
+import com.example.airplaneletter.exception.UnauthorizedException;
 import com.example.airplaneletter.model.Comment;
 import com.example.airplaneletter.model.Post;
 import com.example.airplaneletter.model.User;
 import com.example.airplaneletter.repository.CommentRepository;
 import com.example.airplaneletter.repository.PostRepository;
-import com.example.airplaneletter.dto.response.comment.CommentListResponseData;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
@@ -47,8 +47,20 @@ public class CommentService {
     }
 
     // 댓글 삭제
-    public void deleteComment(UUID commentId) {
-        this.commentRepository.deleteById(commentId);
+    public void deleteComment(User user, UUID commentId) {
+        if(isOwnComment(user, commentId)) {
+            this.commentRepository.deleteById(commentId);
+        }
+    }
+    private boolean isOwnComment(User user, UUID commentId){
+        Comment c = this.commentRepository.findCommentById(commentId);
+        if(c.getWriter().getId().equals(user.getId())){
+            return true;
+        }
+        else{
+            throw new UnauthorizedException(ErrorCode.FORBIDDEN_COMMENT);
+        }
+
     }
     public Page<CommentResponseData> getComments(User user, UUID postId, Pageable pageable){
         // 정렬

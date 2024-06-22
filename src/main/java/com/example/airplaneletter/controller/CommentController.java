@@ -35,8 +35,8 @@ public class CommentController {
 
     // 댓글 삭제
     @DeleteMapping("/posts/comments/{commentId}")
-    public ResponseEntity<ResponseDto<Void>> deleteComment(@PathVariable UUID commentId) {
-        this.commentService.deleteComment(commentId);
+    public ResponseEntity<ResponseDto<Void>> deleteComment(@AuthenticatedUser User user, @PathVariable UUID commentId) {
+        this.commentService.deleteComment(user, commentId);
         return new ResponseEntity<>(ResponseDto.res(HttpStatus.OK, "Comment deleted"), HttpStatus.OK);
     }
 

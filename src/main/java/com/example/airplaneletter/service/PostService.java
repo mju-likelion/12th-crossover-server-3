@@ -1,7 +1,6 @@
 package com.example.airplaneletter.service;
 
 import com.example.airplaneletter.dto.post.CreatePostDto;
-import com.example.airplaneletter.dto.response.comment.CommentListResponseData;
 import com.example.airplaneletter.dto.response.comment.CommentResponseData;
 import com.example.airplaneletter.errorCode.ErrorCode;
 import com.example.airplaneletter.exception.NotFoundException;
@@ -59,6 +58,7 @@ public class PostService {
                 .title(postDto.getTitle())
                 .content(postDto.getContent())
                 .nickname(post.getWriter().getNickname())
+                .createdAt(post.getCreatedAt())
                 .isMyPost(true)
                 .build();
         return postResponseData;
@@ -73,7 +73,7 @@ public class PostService {
         if (isPostOwner(user, oldPost)) {
             this.postRepository.delete(oldPost);
         } else {
-            throw new UnauthorizedException(ErrorCode.FORBIDDEN_USER, "해당 게시글을 삭제할 수 없습니다.");
+            throw new UnauthorizedException(ErrorCode.FORBIDDEN_POST, "해당 게시글을 삭제할 수 없습니다.");
         }
     }
     public PostWithCommentResponseData getPostDetails(User user, UUID postId){
@@ -101,7 +101,6 @@ public class PostService {
                 .createdAt(post.getCreatedAt())
                 .build();
     }
-
     private boolean isPostOwner(User user, Post post){
         if(post.getWriter().equals(user)){
             return true;
