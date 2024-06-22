@@ -1,9 +1,8 @@
 package com.example.airplaneletter.dto.user;
 
-import com.example.airplaneletter.dto.term.TermDto;
+import com.example.airplaneletter.dto.term.AgreeToTermDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 
@@ -26,5 +25,5 @@ public class CreateUserDto {
     @Length(min = 8, max = 13, message = "비밀번호는 8자 이상 13자 이하여야 합니다.")
     private String password;
 
-    private List<TermDto> agreements;
+    private List<AgreeToTermDto> agreements;
 }

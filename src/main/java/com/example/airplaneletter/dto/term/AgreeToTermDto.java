@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Getter
 @Builder
-public class TermDto {
+public class AgreeToTermDto {
     @NotBlank(message = "약관 id가 비었습니다.")
     private UUID termId;
     @NotNull

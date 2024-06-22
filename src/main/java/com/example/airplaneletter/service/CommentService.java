@@ -68,7 +68,7 @@ public class CommentService {
 
         Page<Comment> commentsPage = this.commentRepository.findByPostId(postId, pageable);
         List<CommentResponseData> commentDataList = new ArrayList<>();
-        // 특정 post의 모든 comments 가져오기.
+
         for (Comment comment : commentsPage.getContent()) {
             boolean isMine = comment.getWriter().getId().equals(user.getId());
             CommentResponseData commentData = new CommentResponseData(
