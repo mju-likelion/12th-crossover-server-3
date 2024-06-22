@@ -48,11 +48,11 @@ public class CommentService {
 
     // 댓글 삭제
     public void deleteComment(User user, UUID commentId) {
-        if(isUsersComment(user, commentId)) {
+        if(isOwnComment(user, commentId)) {
             this.commentRepository.deleteById(commentId);
         }
     }
-    private boolean isUsersComment(User user, UUID commentId){
+    private boolean isOwnComment(User user, UUID commentId){
         Comment c = this.commentRepository.findCommentById(commentId);
         if(c.getWriter().getId().equals(user.getId())){
             return true;
