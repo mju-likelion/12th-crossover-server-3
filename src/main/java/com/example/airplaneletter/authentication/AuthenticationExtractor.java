@@ -1,6 +1,8 @@
 package com.example.airplaneletter.authentication;
 
 import com.example.airplaneletter.authentication.token.JwtEncoder;
+import com.example.airplaneletter.errorCode.ErrorCode;
+import com.example.airplaneletter.exception.UnauthorizedException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -16,7 +18,7 @@ public class AuthenticationExtractor {
                 }
             }
         }
-        throw new RuntimeException();
+        throw new UnauthorizedException(ErrorCode.INVALID_TOKEN, "로그인 여부를 확인해주세요.");
     }
 }
 

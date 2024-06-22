@@ -5,7 +5,7 @@ import com.example.airplaneletter.authentication.token.JwtEncoder;
 import com.example.airplaneletter.authentication.token.JwtTokenProvider;
 import com.example.airplaneletter.dto.user.CreateUserDto;
 import com.example.airplaneletter.dto.login.LoginDto;
-import com.example.airplaneletter.dto.term.TermDto;
+import com.example.airplaneletter.dto.term.AgreeToTermDto;
 import com.example.airplaneletter.errorCode.ErrorCode;
 import com.example.airplaneletter.exception.ConflictException;
 import com.example.airplaneletter.exception.NotFoundException;
@@ -38,7 +38,6 @@ public class UserService {
     public void createUser(CreateUserDto createUserDto) {
         // 이메일 중복 검사
         this.isEmailExist(createUserDto.getEmail());
-
         String encryptedPassword = this.passwordHashEncryption.encrypt(createUserDto.getPassword());
 
         User user = User.builder()
@@ -47,7 +46,7 @@ public class UserService {
                 .password(encryptedPassword)
                 .build();
         // 약관 동의
-        for (TermDto termDto : createUserDto.getAgreements()) {
+        for (AgreeToTermDto termDto : createUserDto.getAgreements()) {
             Term agreed = termRepository.findTermById(termDto.getTermId());
             if(termDto.isAgreed() == false){
                 throw new NotFoundException(ErrorCode.MISSING_TERMS, "약관에 동의해 주세요");
@@ -99,6 +98,8 @@ public class UserService {
     public void logout(HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from("AccessToken", null)
                 .maxAge(0)
+                .httpOnly(true)
+                .sameSite("None").secure(true)
                 .path("/")
                 .build();
         response.addHeader("Set-Cookie", cookie.toString());

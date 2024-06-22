@@ -1,5 +1,6 @@
 package com.example.airplaneletter.dto.term;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -9,9 +10,10 @@ import java.util.UUID;
 
 @Getter
 @Builder
-public class TermDto {
+public class AgreeToTermDto {
     @NotBlank(message = "약관 id가 비었습니다.")
     private UUID termId;
-    @NotNull
+
+    @AssertTrue
     private boolean agreed;
 }
