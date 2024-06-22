@@ -19,12 +19,11 @@ public enum ErrorCode {
     INVALID_TOKEN("4011", "잘못된 토큰입니다."),
 
     // 403 Forbidden
-    FORBIDDEN_POST("4030", "해당 포스트에 접근 권한이 없습니다."),
-    FORBIDDEN_COMMENT("4031", "해당 comment에 접근 권한이 없습니다."),
+    FORBIDDEN_USER("4030", "접근 권한이 없습니다."),
 
     // 404 Not Found
     POST_NOT_FOUND("4040", "해당 포스트를 찾을 수 없습니다."),
-    USER_NOT_FOUND("4041", "해당 유저를 찾을 수 없습니다."),
+    USER_NOT_FOUND("4041", "해당 유저를 찾을 수 없습니다. "),
     COMMENT_NOT_FOUND("4042", "해당 댓글을 찾을 수 없습니다."),
 
     // 405 Using wrong HTTP Method

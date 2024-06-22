@@ -73,7 +73,7 @@ public class PostService {
         if (isPostOwner(user, oldPost)) {
             this.postRepository.delete(oldPost);
         } else {
-            throw new UnauthorizedException(ErrorCode.FORBIDDEN_POST, "해당 게시글을 삭제할 수 없습니다.");
+            throw new UnauthorizedException(ErrorCode.FORBIDDEN_USER, "해당 게시글에 접근 권한이 없습니다.");
         }
     }
     public PostWithCommentResponseData getPostDetails(User user, UUID postId){
