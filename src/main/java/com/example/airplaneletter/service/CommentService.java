@@ -58,7 +58,7 @@ public class CommentService {
             return true;
         }
         else{
-            throw new UnauthorizedException(ErrorCode.FORBIDDEN_COMMENT);
+            throw new UnauthorizedException(ErrorCode.FORBIDDEN_USER, "해당 댓글에 접근 권한이 없습니다.");
         }
 
     }
