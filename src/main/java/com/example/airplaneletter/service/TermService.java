@@ -18,7 +18,6 @@ public class TermService {
 
     public TermListResponseData getAllTerms() {
         List<TermResponseData> termList = new ArrayList<>();
-
         for (Term t : termRepository.findAll()) {
             TermResponseData termResponseData = TermResponseData.builder()
                     .termId(t.getId())
@@ -31,7 +30,6 @@ public class TermService {
     }
 
     public void createTerm(CreateTermDto createTermDto){
-
         Term term = Term.builder()
                 .content(createTermDto.getContent())
                 .build();

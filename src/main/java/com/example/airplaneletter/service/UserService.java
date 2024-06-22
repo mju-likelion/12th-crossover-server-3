@@ -38,7 +38,6 @@ public class UserService {
     public void createUser(CreateUserDto createUserDto) {
         // 이메일 중복 검사
         this.isEmailExist(createUserDto.getEmail());
-
         String encryptedPassword = this.passwordHashEncryption.encrypt(createUserDto.getPassword());
 
         User user = User.builder()

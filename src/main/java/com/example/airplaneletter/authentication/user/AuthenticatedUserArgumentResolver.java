@@ -1,8 +1,11 @@
 package com.example.airplaneletter.authentication.user;
 
 import com.example.airplaneletter.authentication.AuthenticationContext;
+import com.example.airplaneletter.errorCode.ErrorCode;
+import com.example.airplaneletter.exception.UnauthorizedException;
 import com.example.airplaneletter.model.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;

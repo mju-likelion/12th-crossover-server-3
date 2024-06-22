@@ -12,6 +12,7 @@ import java.util.UUID;
 public class AgreeToTermDto {
     @NotBlank(message = "약관 id가 비었습니다.")
     private UUID termId;
+
     @NotNull
     private boolean agreed;
 }
